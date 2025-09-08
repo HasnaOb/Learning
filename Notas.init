@@ -7,7 +7,7 @@ Como podras ver en package, he instalado algunas dependencias y también devDepe
 Antes de instalar "npm i" lee completamente este documento. Despues vuelve aquí y realiza los siguientes pasos:
  1.- Elimina node_modules (como tendrás windows, tardará unos minutos, se paciente)
  2.- Instala paquetes "npm i"
- 3.- Deberias poder ejecutar el comando "npm run storybook"
+ 3.- Deberias poder ejecutar el comando "npm run storybook" o "npm run start" que tienes en el package.json
 
 
 · También te recomiendo tener las siguientes extensiones instaladas:
