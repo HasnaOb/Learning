@@ -1,0 +1,33 @@
+En esta mini lección vamos a aprender dos cosas principales.
+
+La primera serán la gestion de las tareas o modificaciones en el repo.
+Excluyendo esta PR, el resto de PR JAMÁS las realizaremos sobre master.
+
+La dinámica reá la siguiente.
+
+  1.- Estás en master
+  2.- Actualizas rama `git pull`
+  3.- Creas una rama nueva con la siguiente estructura
+    feat/name-branch
+    si es una correccion será fix/...
+    y si es un refactor será refactor/...
+    para crearlo mas rapidamente haces `git checkout -b feat/name-branch` esto te creará la rama y también te llevará a ella
+  4.- realizas las modificaciones que quieras
+  5.- Commits, a no ser que por algun motivo quieras separar los commits, prefiero solo un unico commit siguiendo esta estructura.
+    feat: that i have modified
+    revisa esta pagina para entender como hacer los commits: https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13
+  6.- Subes la rama a github:
+    para esto, tras haber comiteado, haces `git push` y en consola te saldrá el comando que debes ejecutar. Lo ejecutas y aparecerá en la parte de Pull Request de tu repositorio una PR nueva: https://github.com/HasnaOb/Learning/pulls
+  7.- Tendrás que crear la PR indicando de que rama viene la modificaciones
+  8.- dado que la creaste tu, la revisaré yo, y si la veo bien la completo y mergea5mos a master. En este momento borramos la rama temporal.
+
+Con estos pasos aprenderás a como es la dinámica de cada modificacion, por muy basica que sea.
+
+Segunda parte, esta ya será algo mas entretenida para ti.
+Quiero que crees un componente nuevo (siguiendo la lógica de "HelloWord") con el nombre de "infoBox".
+Este componente será lo que denomina un componente desconectado. O sea, un componente tonto, que no sabe hacer más que una cosa, en este ejemplo, pintar un texto.
+Despues lo complicaremos progresivamente, pero por ahora lo que quiero que haga este componente es pintar un cuadrado de color verde, con un padding de 20px y sin margenes. Ocupará todo el ancho, y tendrá dentro el texto "Este texto es un ejemplo".
+Este texto puede venir de un archivo de traducciones como está hecho "HelloWord" o lo puedes poner a pelo, perote recomiendo que lo hagas mediante traducciones si tienes tiempo.
+Cuando esté listo, avisame y revisaré la PR que has creado, si está bien mergearás, si no, te añadiré comentarios y los revisarás.
+
+Disfruta de los deberes :)
