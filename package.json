@@ -3,9 +3,44 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npm run storybook",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@lit/reactive-element": "^2.1.1"
+  },
+  "devDependencies": {
+    "@chromatic-com/storybook": "^4.1.1",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@storybook/addon-a11y": "^9.1.5",
+    "@storybook/addon-actions": "^9.0.8",
+    "@storybook/addon-console": "^3.0.0",
+    "@storybook/addon-docs": "^9.1.5",
+    "@storybook/addon-links": "^9.1.5",
+    "@storybook/addon-themes": "^9.1.5",
+    "@storybook/addon-vitest": "^9.1.5",
+    "@storybook/web-components": "^9.1.5",
+    "@storybook/web-components-vite": "^9.1.5",
+    "@web/rollup-plugin-import-meta-assets": "^2.3.0",
+    "@web/storybook-framework-web-components": "^0.2.1",
+    "eslint": "^9.35.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-lit-a11y": "^5.1.1",
+    "eslint-plugin-storybook": "^9.1.5",
+    "eslint-plugin-wc": "^3.0.1",
+    "lint-staged": "^16.1.6",
+    "lit": "^3.3.1",
+    "prettier": "^3.6.2",
+    "prettier-plugin-package": "^2.0.0",
+    "storybook": "^9.1.5",
+    "vitest": "^3.2.4",
+    "@vitest/browser": "^3.2.4",
+    "playwright": "^1.55.0",
+    "@vitest/coverage-v8": "^3.2.4"
   },
   "repository": {
     "type": "git",
@@ -17,5 +52,36 @@
   "bugs": {
     "url": "https://github.com/HasnaOb/Learning/issues"
   },
-  "homepage": "https://github.com/HasnaOb/Learning#readme"
+  "homepage": "https://github.com/HasnaOb/Learning#readme",
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.mjs": [
+      "prettier --write",
+      "eslint --fix"
+    ],
+    "*.json": [
+      "prettier --write"
+    ],
+    "*.md": [
+      "prettier --write",
+      "markdownlint --ignore '*/CHANGELOG.md' --ignore '_snapshots_//.md' --ignore '.changeset/*/.md'"
+    ],
+    "*.html": [
+      "eslint --fix"
+    ]
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "arrowParens": "avoid",
+    "trailingComma": "all"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:storybook/recommended"
+    ]
+  }
 }

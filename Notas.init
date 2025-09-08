@@ -1,0 +1,57 @@
+Buenas Hasna,
+Esto será lo unico que escribiremos en español, el resto del proyecto intentaremos que sea puramente en ingles, para acostumbrarnos.
+
+Para empezar verás que he reestructurado el repositorio, tenias el repositorio en formato multirepositorio (el repositorio Learning dentro del principal) solo trabajaremos en formato Monorepo que será más cómodo.
+
+Como podras ver en package, he instalado algunas dependencias y también devDependencias, además de eliminar lo que tenias creado tu anteriormente.
+Antes de instalar "npm i" lee completamente este documento. Despues vuelve aquí y realiza los siguientes pasos:
+ 1.- Elimina node_modules (como tendrás windows, tardará unos minutos, se paciente)
+ 2.- Instala paquetes "npm i"
+ 3.- Deberias poder ejecutar el comando "npm run storybook"
+
+
+· También te recomiendo tener las siguientes extensiones instaladas:
+
+- Prettier - Code formatter -> Nos ayudará a mantener un formato limpio en todo el documento, podrás olvidarte de tabular, lo hará automáticamente.
+- ESLint -> Ayudará a validar el formato javascript
+- GitLens - Git supercharget -> Ayudará a ver los cambios de Git
+- MDX -> Ayudará a ver los archivos MDX
+- Code Spell Checker -> Dado que trabajaremos completamente en ingles, nos ayudará a dar nombre y corregir los errores que no sean en inglés
+
+
+· Por otro lado te insto a configurar en tu visual studio code, en la parte de configuracion la siguiente configuracion (te paso el json):
+{
+    "workbench.colorTheme": "Default Dark Modern",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "workbench.editor.wrapTabs": true,
+    "editor.tabSize": 2,
+    "editor.wordWrap": "on",
+    "editor.formatOnSave": true,
+    "cSpell.ignorePaths": [
+        "package-lock.json",
+        "node_modules",
+        "vscode-extension",
+        ".git/{info,lfs,logs,refs,objects}/**",
+        ".git/{index,*refs,*HEAD}",
+        ".vscode",
+        ".vscode-insiders",
+        "notas.init",
+        "es.js"
+    ]
+}
+
+· En orden son para:
+- workbench.colorTheme -> tema oscuro, puedes cambiarlo
+- editor.defaultFormatter -> espeficicas que el formato que vas usar es el plugin instalado antes
+- workbench.editor.wrapTabs -> cuando tienes muchas pestañas abiertas, no te genera scroll, si no que se generan lineas. No importante
+- editor.tabSize -> tamaño del tabulador
+- editor.wordWrap -> que no haya scroll horizontal, si quieres puedes dejarlo
+- editor.formatOnSave -> para no tener que ejecutar el comando de formateado de forma manual, esto lo eujecutará por ti cuando guardes.
+- cSpell.ignorePaths -> Le dice al plugin "Code Spell Checker" que va a ignorar. Solo añadé los dos últimos, el resto de los añade automáticamente. Si no instalas el plugin, no lo necesitas.
+
+· Los que te voy a pedir de forma obligatorio son:
+- editor.defaultFormatter
+- editor.tabSize
+- editor.formatOnSave -> si no lo añades, tendrás que acostumbrarte a ejecutar el comando cada vez.
+
+· El porqué te "obligo" a usar estos tres es porque cuando revise tu código y añada modificaciones, si tenemos diferentes configuraciones de tabulador (por ejemplo) se generarán muchas mas diferencias, y te costará mucho más ver que modifiqué y que nó. Pudiendo llegar a tener conflictos innecesarios.

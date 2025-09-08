@@ -4,20 +4,15 @@ import { Header } from './Header';
 
 export default {
   title: 'Example/Header',
-  component: Header,
-  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
+  // This component will have an automatically generated Autodocs entry: https://storybook.js.org/web-components/vue/writing-docs/autodocs
   tags: ['autodocs'],
-  parameters: {
-    // More on how to position stories at: https://storybook.js.org/docs/configure/story-layout
-    layout: 'fullscreen',
-  },
+  render: (args) => Header(args),
   args: {
     onLogin: fn(),
     onLogout: fn(),
     onCreateAccount: fn(),
   },
 };
-
 export const LoggedIn = {
   args: {
     user: {
