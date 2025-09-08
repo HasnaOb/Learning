@@ -1,4 +1,11 @@
-node_modules
+# dependencias
+node_modules/
 
-*storybook.log
-storybook-static
+# build de storybook
+storybook-static/
+
+# logs de storybook
+*.storybook.log
+
+# build de Vite 
+dist/
