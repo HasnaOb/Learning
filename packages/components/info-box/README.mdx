@@ -1,0 +1,34 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+
+import InfoBox from './src/InfoBox.js';
+import * as Stories from './InfoBox.stories.js';
+
+<Meta of={Stories} />
+
+{/* # = h1 */}
+
+# HelloWord component
+
+This component renders a screen containing a green box with text displayed inside it.
+
+## Properties
+
+Component can be configured via these properties:
+
+| Name           | Type   | Description                        | Default |
+| -------------- | ------ | ---------------------------------- | ------- |
+| `Translations` | Object | The translations are stored inside | null    |
+
+## Events
+
+This component has no events.
+
+## Usage
+
+```html
+<info-box></info-box>
+```
+
+## Demo
+
+<Story of={Stories.main} />

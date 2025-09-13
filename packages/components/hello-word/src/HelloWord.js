@@ -30,8 +30,9 @@ export default class HelloWord extends LitElement {
         Object.keys(elem).some(key => key === HelloWord.is),
       )[HelloWord.is];
       this.translations = await translateFunction(locale);
-      console.log(this.translations);
-    } catch (error) {}
+    } catch {
+      this.translations = {};
+    }
   }
 
   static localizeNamespaces = [

@@ -1,9 +1,21 @@
 /** @type { import('@web/storybook-framework-web-components').StorybookConfig } */
+
+import remarkGfm from 'remark-gfm';
+
 const config = {
-  stories: ['../packages/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../packages/**/README.mdx', '../packages/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     '@chromatic-com/storybook',
-    '@storybook/addon-docs',
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
     '@storybook/addon-a11y',
     '@storybook/addon-vitest',
     '@storybook/addon-links',

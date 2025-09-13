@@ -1,0 +1,32 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+
+import HelloWord from './src/HelloWord.js';
+import * as Stories from './HelloWord.stories.js';
+
+<Meta of={Stories} />
+
+# HelloWord component
+
+This component will display a screen with an initial text
+
+## Properties
+
+Component can be configured via these properties:
+
+| Name           | Type   | Description                        | Default |
+| -------------- | ------ | ---------------------------------- | ------- |
+| `Translations` | Object | The translations are stored inside | null    |
+
+## Events
+
+This component has no events.
+
+## Usage
+
+```html
+<hello-word></hello-word>
+```
+
+## Demo
+
+<Story of={Stories.main} />
