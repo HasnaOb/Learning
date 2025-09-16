@@ -13,13 +13,18 @@ This component will display a screen with an initial text
 
 Component can be configured via these properties:
 
-| Name           | Type   | Description                        | Default |
-| -------------- | ------ | ---------------------------------- | ------- |
-| `Translations` | Object | The translations are stored inside | null    |
+| Name           | Type    | Description                        | Default | Private |
+| -------------- | ------- | ---------------------------------- | ------- | ------- |
+| `translations` | Object  | The translations are stored inside | null    | true    |
+| `hasSymbol`    | Boolean | Show icon or not                   | false   | false   |
+| `listString`   | Object  | List for elements                  | []      | false   |
+| `description`  | String  | Description for example            | ""      | false   |
 
 ## Events
 
-This component has no events.
+| Name                          | Description            | Detail | Composed | Bubbles |
+| ----------------------------- | ---------------------- | ------ | -------- | ------- |
+| `{HelloWord.events.continue}` | By clicking the button | Object | true     | true    |
 
 ## Usage
 

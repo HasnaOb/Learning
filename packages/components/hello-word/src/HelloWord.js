@@ -12,10 +12,20 @@ export default class HelloWord extends LitElement {
     super();
 
     this.translations = null;
+    this.hasSymbol = false;
+    this.description = '';
+    this.listString = [];
   }
 
   static properties = {
-    translations: { type: Object },
+    translations: { type: Object, state: true },
+    hasSymbol: { type: Boolean, attribute: 'has-symbol' },
+    description: { type: String, attribute: 'description', reflect: true },
+    listString: { type: Object },
+  };
+
+  static events = {
+    continue: 'continue',
   };
 
   async connectedCallback() {
@@ -47,7 +57,42 @@ export default class HelloWord extends LitElement {
     },
   ];
 
+  handleNormalClick() {
+    // eslint-disable-next-line no-console
+    console.log('Normal:', this);
+  }
+
+  handleArrowClick() {
+    // eslint-disable-next-line no-console
+    console.log('Arrow:', this);
+  }
+
+  renderComponent() {
+    return html`<div>
+      ${this.hasSymbol ? html`<span>👋</span>` : ''}
+      <h1>${this.translations['title']}</h1>
+      ${this.description ? html`<p class="description">${this.description}</p>` : ''}
+      ${this.listString?.length
+        ? html`<ul>
+            ${this.listString.map(item => html`<li>${item}</li>`)}
+          </ul>`
+        : ''}
+      <button @click="${this.continue}">${this.translations['button']}</button>
+    </div>`;
+  }
+
+  continue(ev) {
+    ev?.preventDefault();
+    this.dispatchEvent(
+      new CustomEvent(HelloWord.events.continue, {
+        detail: { example: 'text', number: 1 },
+        bubbles: true,
+        composed: true,
+      }),
+    );
+  }
+
   render() {
-    return this.translations ? html`<h1>${this.translations['title']}</h1>` : html``;
+    return this.translations ? this.renderComponent() : html``;
   }
 }

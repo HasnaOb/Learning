@@ -1,3 +1,4 @@
 export default {
-  title: 'Hello word',
+  title: 'Hola Mundo',
+  button: 'Click aquí',
 };

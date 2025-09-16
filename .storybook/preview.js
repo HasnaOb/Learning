@@ -1,3 +1,5 @@
+import { decorators } from './decorators.js';
+
 /** @type { import('@storybook/web-components-vite').Preview } */
 const preview = {
   parameters: {
@@ -15,6 +17,7 @@ const preview = {
       test: 'todo',
     },
   },
+  decorators: [...decorators],
 };
 
 export default preview;
