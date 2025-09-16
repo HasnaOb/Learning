@@ -1,13 +1,14 @@
-import { LitElement, html } from "lit";
-import { InfoBoxStyle } from "./InfoBox.style.js";
-import es from "../assets/translations/es-ES.js";
+import { LitElement, html } from 'lit';
+import { InfoBoxStyle } from './InfoBox.style.js';
+import es from '../assets/translations/es-ES.js';
 
 // Unique name of the component, used to identify it in the translation system
-const NAMESPACE = "info-box";
+const NAMESPACE = 'info-box';
 
 export default class InfoBox extends LitElement {
   // Defines the name of the custom element
   static is = NAMESPACE;
+
   // Applies the imported styles to the component's shadow DOM
   static styles = InfoBoxStyle;
 
@@ -35,16 +36,14 @@ export default class InfoBox extends LitElement {
     try {
       // Finds the translation function specific to this component within the namespace
       const translateFunction = InfoBox.localizeNamespaces.find(elem =>
-        Object.keys(elem).some(key => key === InfoBox.is)
+        Object.keys(elem).some(key => key === InfoBox.is),
       )[InfoBox.is];
 
       // Executes the translation function and assigns the result to the reactive property
       this.translations = await translateFunction(locale);
-      // Logs translations to the console to verify they have been loaded correctly
-      console.log(this.translations);
-    } catch (error) {
-      // Fallback to Spanish in case of an error during translation loading
-      this.translations = es;
+    } catch {
+      // Fallback to empty in case of an error during translation loading
+      this.translations = {};
     }
   }
 
@@ -53,11 +52,11 @@ export default class InfoBox extends LitElement {
       [NAMESPACE]: locale => {
         const namespaces = {
           // Spanish loaded statically
-          "es-ES": () => Promise.resolve(es),
+          'es-ES': () => Promise.resolve(es),
           // English loaded dynamically only if needed
-          "en-GB": () => import("../assets/translations/en-GB.js"),
+          'en-GB': () => import('../assets/translations/en-GB.js'),
         };
-        // Returns the corresponding translation or Spanish by default if not available 
+        // Returns the corresponding translation or Spanish by default if not available
         return namespaces[locale] ? namespaces[locale]() : Promise.resolve(es);
       },
     },
@@ -66,9 +65,9 @@ export default class InfoBox extends LitElement {
   // Renders the HTML of the component
   render() {
     return this.translations
-      // Displays the title if translations have been loaded
-      ? html`<div class="info-box--div">${this.translations.title}</div>`
-      // Renders nothing while translations are loading
-      : html``;
+      ? // Displays the title if translations have been loaded
+        html`<div class="info-box--div">${this.translations?.title}</div>`
+      : // Renders nothing while translations are loading
+        html``;
   }
 }
