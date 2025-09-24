@@ -1,0 +1,37 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+
+import ButtonSymbol from './src/ButtonSymbol.js';
+import * as Stories from './ButtonSymbol.stories.js';
+
+<Meta of={Stories} />
+
+# ButtonSymbol component
+
+This component renders a single button displaying a symbol.  
+When clicked, it emits a custom `operation` event with the symbol as detail.
+
+## Properties
+
+The component can be configured via the following property:
+
+| Name     | Type   | Description                                | Default |
+| -------- | ------ | ------------------------------------------ | ------- |
+| `symbol` | String | The symbol to display on the button        | ""      |
+
+**Valid symbols:** `The list of valid symbols`
+
+## Events
+
+| Name         | Description                          | Detail               | Composed | Bubbles |
+| ------------ | ------------------------------------ | -------------------- | -------- | ------- |
+| `operation`  | Emitted when the button is clicked   | `{ symbol: string }` | true     | true    |
+
+## Usage
+
+```html
+<button-symbol symbol="+"></button-symbol>
+```
+
+## Demo
+
+<Story of={Stories.main} />

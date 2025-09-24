@@ -9,9 +9,26 @@ export default {
   title: 'Components/InfoBox',
 };
 
-export const main = () => html`<info-box></info-box>`;
+const argTypes = {
+  text: {
+    control: { type: 'text' },
+    description: 'The text displayed inside the InfoBox.',
+    table: {
+      type: { summary: 'string' },
+      defaultValue: { summary: '' },
+    },
+  },
+};
+
+const defaultArgs = {
+  text: 'This is an example InfoBox',
+};
+
+export const main = ({ text }) => html`<info-box text="${text}"></info-box>`;
+
+main.argTypes = argTypes;
+main.args = defaultArgs;
 main.parameters = {
   controls: { expanded: true },
   docs: { source: { type: 'code' } },
 };
-
