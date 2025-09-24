@@ -1,39 +1,6 @@
-import {
-  defineCE,
-  elementUpdated,
-  expect,
-  fixture,
-  fixtureCleanup,
-  oneEvent,
-  waitUntil,
-} from '@open-wc/testing';
+import { expect, fixtureCleanup, oneEvent, waitUntil } from '@open-wc/testing';
 import HelloWord from '../src/HelloWord.js';
-
-const deepElementUpdate = async node => {
-  let items = Array.from(node.children);
-
-  if (node.shadowRoot) {
-    if (!node.shadowRoot.childrenElements) {
-      await elementUpdated(node);
-    }
-    items = items.concat(Array.from(node.shadowRoot.children));
-  }
-  return await Promise.all(items.map(deepElementUpdate));
-};
-
-const createElement = async (Ctor, props = {}, attributes = {}) => {
-  const tagName = defineCE(class extends Ctor {});
-  const element = await fixture(
-    `<${tagName} ${Object.entries(attributes).map(([key, value]) => ` ${key}="${value}"`)}></${tagName}>`,
-  );
-
-  Object.entries(props).forEach(([key, value]) => {
-    element[key] = value;
-  });
-
-  await deepElementUpdate(element);
-  return element;
-};
+import createElement from '../../../../test/utils/createElement.js';
 
 describe('HelloWord', () => {
   let element;
