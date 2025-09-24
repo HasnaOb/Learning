@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Funciones Tradicionales vs Arrow Functions</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f2f2f2;
+        padding: 20px;
+        color: #333;
+      }
+
+      .container {
+        background: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1,
+      h2 {
+        color: #333;
+      }
+
+      pre {
+        background-color: #eee;
+        padding: 15px;
+        border-radius: 5px;
+        overflow-x: auto;
+      }
+
+      code {
+        font-family: 'Courier New', monospace;
+      }
+
+      button {
+        margin-top: 10px;
+        padding: 10px 15px;
+        background-color: #1976d2;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #1565c0;
+      }
+
+      p {
+        margin-top: 10px;
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Diferencia entre Funciones Tradicionales y Arrow Functions</h1>
+
+      <p>
+        Este ejemplo muestra cómo el valor de <code>this</code> varía entre funciones tradicionales
+        y arrow functions.
+      </p>
+
+      <h2>Función Tradicional</h2>
+      <pre><code>
+const objTradicional = {
+  nombre: "Pedro",
+  mostrarThis: function() {
+    console.log(this);
+  }
+};
+objTradicional.mostrarThis(); // this = objTradicional
+    </code></pre>
+
+      <button id="btnTradicional" onclick="(() => console.log('This inline',this))()">
+        Probar Función Tradicional
+      </button>
+      <p><strong>Resultado:</strong> <span id="resultadoTradicional"></span></p>
+
+      <h2>Arrow Function</h2>
+      <pre><code>
+const objArrow = {
+  nombre: "Lucía",
+  mostrarThis: () => {
+    console.log(this);
+  }
+};
+objArrow.mostrarThis(); // this = contexto global (window o undefined en strict)
+    </code></pre>
+
+      <button id="btnArrow" onclick="(function(){console.log('This inline',this)})()">
+        Probar Arrow Function
+      </button>
+      <p><strong>Resultado:</strong> <span id="resultadoArrow"></span></p>
+    </div>
+
+    <script>
+      // Función Tradicional
+      const objTradicional = {
+        nombre: 'Pedro',
+        showThis: function () {
+          return this;
+        },
+      };
+
+      // Arrow Function
+      const objArrow = {
+        nombre: 'Lucía',
+        showThis: () => {
+          return this;
+        },
+      };
+
+      document.getElementById('btnTradicional').addEventListener('click', () => {
+        const result = objTradicional.showThis();
+        document.getElementById('resultadoTradicional').textContent = JSON.stringify(result);
+        console.log('Función Tradicional - this:', result);
+      });
+
+      document.getElementById('btnArrow').addEventListener('click', () => {
+        const result = objArrow.showThis();
+        document.getElementById('resultadoArrow').textContent = result;
+        console.log('Arrow Function - this:', result);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,171 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/05 - Lección/1- Lección" />
+
+# Propiedades reactiva
+
+En esta lección nos vamos a meter más de lleno en el tema de las propiedades reactivas.
+Como vimos anteriormente, una propiedad reactiva es aquella que, cuando sufre un cambio, fuerza la actualización del renderizado.
+Esto debe usarse con cuidado, con el fin de que el render no se ejecute constantemente, sino solo cuando sea necesario.
+
+Por otro lado, estas propiedades tienen otra característica muy útil: permiten la transferencia de información desde el componente padre hacia el propio componente.
+Esto se entiende mejor con un ejemplo.
+
+Si abres de nuevo el componente HelloWord, verás que sus properties han sufrido una variación:
+
+## Explicación con HelloWord
+
+En este ejemplo veremos los 4 tipos diferentes de propiedades que existen:
+
+### Propiedades privadas
+
+Si no quieres que una propiedad sea modificable desde fuera, añade `state: true`
+
+```js
+translations: { type: Object, state: true },
+```
+
+### Atributos personalizados
+
+Puedes asignar un atributo concreto a una propiedad.
+En este caso, la propiedad es de tipo Boolean. Para usarla en HTML, debes preceder el nombre del atributo con el símbolo ?.
+
+```js
+hasSymbol: { type: Boolean, attribute: 'has-symbol' },
+```
+
+```html
+<hello-word ?has-symbol="${hasSymbol}" ...></hello-word>
+```
+
+### Propiedades de tipo String
+
+Para cadenas de texto basta con declararlas directamente:
+
+```js
+description: { type: String, attribute: 'description' },
+```
+
+```html
+<hello-word description="Holita" ...></hello-word>
+```
+
+En este caso también podemos añadir la opción `reflect: true`.
+Esto hace que el valor de la propiedad se sincronice con el atributo HTML, y viceversa. Es decir, la propiedad “escucha” cambios externos.
+
+Cuando cargas un componente en Lit, este se renderiza una primera vez con los valores iniciales. Si quieres que el componente detecte cambios posteriores (hechos desde fuera, por ejemplo desde Storybook), necesitas usar `reflect: true`.
+
+Si inspeccionas el componente desde Storybook y cambias manualmente la propiedad `hasSymbol`, verás que no se actualiza porque no tiene reflect. En cambio, `description` sí lo hace porque lo hemos marcado con `reflect: true`.
+
+Cuando lo cambias desde los controls de Storybook, este fuerza el render completo del componente.
+
+## Propiedades de tipo Objeto
+
+Si lo que quieres es enviar un objeto, debes usar el prefijo `.` antes del atributo:
+
+```js
+listString: { type: Object },
+```
+
+```js
+<hello-word .listString="${[1, 2, 3]}" ...>
+```
+
+> **Nota importante:** Todas las properties en Lit se pueden tratar como objetos. Por tanto, puedes unificar el uso en Storybook escribiéndolas siempre con `.` delante y usando el nombre de la propiedad.
+
+De esto:
+
+```html
+<hello-word
+  ?has-symbol="${hasSymbol}"
+  description="${description}"
+  .listString="${listString}"
+></hello-word>
+```
+
+Pasarías a esto:
+
+```html
+<hello-word
+  .hasSymbol="${hasSymbol}"
+  .description="${description}"
+  .listString="${listString}"
+></hello-word>
+```
+
+## Cambios en Storybook
+
+El Storybook del componente `HelloWord` también ha cambiado.
+Ahora se definen las propiedades con valores por defecto, lo que te permitirá interactuar con ellas desde el panel de **controls**.
+
+Esto es muy útil para probar todas las casuísticas del componente.
+Los tipos de controles que permite Storybook son variados (texto, numéricos, objetos, selectores, funciones, etc.). Ya los iremos viendo poco a poco.
+
+## Eventos en Lit
+
+Con las **properties** conseguimos comunicación de padre a hijo.
+Con los **eventos**, conseguimos la comunicación de hijo a padre.
+
+Los eventos pueden lanzarse en cualquier momento: al renderizar el componente, al cargar datos o cuando el usuario interactúa (por ejemplo, haciendo click en un botón).
+
+Un ejemplo sencillo sería un botón:
+
+```js
+html`<button @click="${this.continue}">${this.translations['button']}</button>`;
+```
+
+Lo que pasamos a @click es una función. Puedes hacerlo de varias formas:
+
+```js
+html`<button @click="${this.continue}" ...></button>`;
+html`<button @click="${() => this.continue()}" ...></button>`;
+```
+
+Cuando el usuario haga click, se ejecutará el método continue, que a su vez lanzará un CustomEvent:
+
+```js
+this.dispatchEvent(
+  new CustomEvent('continue', {
+    detail: { example: 'texto', number: 1 },
+    bubbles: true,
+    composed: true,
+  }),
+);
+```
+
+Desglose del evento
+
+- **`this.dispatchEvent(...)`:** dispara el evento.
+- **`new CustomEvent('continue', { ... })`:** creamos un evento personalizado con el nombre 'continue'.
+- **`detail`:** aquí puedes enviar cualquier dato: strings, números, objetos… Es opcional, pero suele ser la vía principal de transmisión de datos.
+- **`bubbles`:** si es true, el evento se propagará hacia arriba por el árbol del DOM.
+- **`composed`:** si es true, el evento puede atravesar el shadowRoot. Sin esto, el evento solo sería interno del componente.
+
+## Limpieza de código
+
+En nuestros componentes, para mantener el código más ordenado, guardaremos los nombres de los eventos en una propiedad estática events.
+Esto no es de Lit, es una convención propia.
+
+```js
+this.dispatchEvent(
+  new CustomEvent(HelloWord.events.continue, {
+    detail: { example: 'text', number: 1 },
+    bubbles: true,
+    composed: true,
+  }),
+);
+```
+
+## Captura del evento en Storybook
+
+En el Storybook, capturamos el evento así:
+
+```html
+<tag @continue="${handler}"></tag>
+```
+
+Gracias a la configuración de los decorators del storybook, podrás ver el evento en la pestaña **Actions** de Storybook.
+
+## Documentación
+
+Por último, recuerda actualizar el **README** del componente con la nueva información, especialmente la parte de los eventos.

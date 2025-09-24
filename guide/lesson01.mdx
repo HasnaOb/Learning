@@ -1,0 +1,69 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/01 - Lección/1- Lección" />
+
+# Empezando en el repositorio
+
+## Dependencias e instalación
+
+Para empezar, verás que he reestructurado el repositorio.
+Tenías el repositorio en formato multirepositorio (el repositorio Learning dentro del principal); ahora solo trabajaremos en formato monorepo, que será más cómodo.
+
+Como podrás ver en package.json, he instalado algunas dependencias y también devDependencies, además de eliminar lo que tenías creado anteriormente.
+Antes de instalar `npm i`, lee completamente este documento. Después vuelve aquí y realiza los siguientes pasos:
+
+- Elimina node_modules (como tendrás Windows, tardará unos minutos, sé paciente).
+- Instala los paquetes con `npm i`.
+- Deberías poder ejecutar el comando `npm run storybook` o `npm run start`, que tienes en el package.json.
+
+## Extensiones y configuración en Visual Studio Code
+
+Te recomiendo tener las siguientes extensiones instaladas:
+
+- **Prettier:** Code formatter: Nos ayudará a mantener un formato limpio en todo el documento; podrás olvidarte de tabular, lo hará automáticamente.
+- **ESLint:** Ayudará a validar el formato JavaScript.
+- **GitLens:** Git supercharged: Ayudará a ver los cambios de Git.
+- **MDX:** Ayudará a visualizar los archivos MDX.
+- **Code Spell Checker:** Dado que trabajaremos completamente en inglés, nos ayudará a nombrar y corregir los errores que no estén en inglés.
+
+Por otro lado, te insto a configurar en tu Visual Studio Code, en la parte de configuración, el siguiente JSON:
+
+```json
+{
+  "workbench.colorTheme": "Default Dark Modern",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "workbench.editor.wrapTabs": true,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "cSpell.ignorePaths": [
+    "package-lock.json",
+    "node_modules",
+    "vscode-extension",
+    ".git/{info,lfs,logs,refs,objects}/**",
+    ".git/{index,*refs,*HEAD}",
+    ".vscode",
+    ".vscode-insiders",
+    "notas.init",
+    "es.js"
+  ]
+}
+```
+
+En orden, estas configuraciones son para:
+
+- **`workbench.colorTheme`:** Tema oscuro. _OPTATIVO_
+- **`editor.defaultFormatter`:** Especifica el formato del editor, indicamos que vas a usar es el plugin instalado anteriormente.
+- **`workbench.editor.wrapTabs`:** Cuando tienes muchas pestañas abiertas, no genera scroll, sino que se organizan en varias líneas. _OPTATIVO_
+- **`editor.tabSize`:** Tamaño del tabulador.
+- **`editor.wordWrap`:** Para que no haya scroll horizontal; si quieres, puedes dejarlo así.
+- **`editor.formatOnSave`:** Para no tener que ejecutar el comando de formateado de forma manual, esto lo ejecutará por ti cada vez que guardes.
+- **`cSpell.ignorePaths`:** Le indica al plugin "Code Spell Checker" qué archivos o rutas debe ignorar. Solo añade los dos últimos; el resto se añaden automáticamente. _Si no instalas el plugin, no lo necesitas._
+
+Los que te voy a pedir de forma obligatoria son:
+
+- **`editor.defaultFormatter`**
+- **`editor.tabSize`**
+- **`editor.formatOnSave`**: Si no lo añades, tendrás que acostumbrarte a ejecutar el comando antes de commitear.
+
+El porqué te "obligo" a usar estos tres es porque, cuando revise tu código y añada modificaciones, si tenemos configuraciones de tabulador diferentes (por ejemplo), se generarán muchas más diferencias, y te costará mucho más ver qué modifiqué y qué no, pudiendo llegar a tener conflictos innecesarios.

@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/02 - Lección/1- Lección" />
+
+# Metodología de trabajo en el repositorio
+
+## Gestion de tareas y modificaciones en el repositorio
+
+Te quedan prohibido realizar modificaciones directamente sobre master.
+
+La dinámica será la siguiente:
+
+1. Estás en master.
+2. Actualizas la rama con git pull.
+3. Creas una rama nueva (temporal) con la siguiente estructura:
+
+- **`feat/name-branch`** (si es una nueva funcionalidad)
+- **`fix/name-branch`** (si es una corrección)
+- **`refactor/name-branch`** (si es un refactor)
+  Para crearla más rápidamente, usa `git checkout -b feat/name-branch`. Esto te creará la rama y también te cambiará a ella.
+
+4. Realizas las modificaciones que quieras.
+5. Commits: A no ser que por algún motivo quieras separar los commits, prefiero solo **un único commit** siguiendo esta estructura:
+
+- `feat: that i have modified`
+  Revisa esta página para entender cómo hacer los [commits](https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13)
+
+6. Subes la rama a GitHub:
+   Para esto, después de haber hecho commit, ejecutas git push. En la consola te saldrá el comando que debes ejecutar. Lo ejecutas y aparecerá una nueva PR en la sección de Pull Requests de tu [repositorio](https://github.com/HasnaOb/Learning/pulls)
+7. Tendrás que crear la PR indicando de qué rama provienen las modificaciones.
+
+Dado que la creaste tú, la revisaré yo. Si la veo bien, la completaré y haremos merge a master. En este momento, borraremos la rama temporal.
+Con estos pasos aprenderás cómo es la dinámica de cada modificación, por muy básica que sea.
+
+## Deberes
+
+Quiero que crees un componente nuevo (siguiendo la lógica de "[HelloWorld](../packages/components/hello-word/src/HelloWord.js)") con el nombre de `InfoBox`.
+
+Este componente será lo que se denomina un componente desconectado. Es decir, un componente "tonto" que no sabe hacer más que una cosa: en este ejemplo, pintar un texto.
+
+Después lo complicaremos progresivamente, pero por ahora lo que quiero que haga este componente es pintar un cuadrado de color verde, con un padding de 20px y sin márgenes. Ocupará todo el ancho y tendrá dentro el texto "**Este texto es un ejemplo**".
+
+Este texto puede venir de un archivo de traducciones, como está hecho "HelloWorld", o lo puedes poner directamente. No obstante, te recomiendo que lo hagas mediante traducciones si tienes tiempo.
+Cuando esté listo, avísame y revisaré la PR que has creado. Si está bien, haremos merge; si no, te añadiré comentarios y los revisarás.

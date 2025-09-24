@@ -3,7 +3,11 @@
 import remarkGfm from 'remark-gfm';
 
 const config = {
-  stories: ['../packages/**/README.mdx', '../packages/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: [
+    '../guide/**/*.mdx',
+    '../packages/**/README.mdx',
+    '../packages/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+  ],
   addons: [
     '@chromatic-com/storybook',
     {

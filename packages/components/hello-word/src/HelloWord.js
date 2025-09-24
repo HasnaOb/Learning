@@ -1,9 +1,11 @@
 import { LitElement, html } from 'lit';
+import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 import { HelloWordStyle } from './HelloWord.style';
 import es from '../assets/translations/es-ES.js';
+import InfoBox from '../../info-box/src/InfoBox.js';
 
 const NAMESPACE = 'hello-word';
-export default class HelloWord extends LitElement {
+export default class HelloWord extends ScopedElementsMixin(LitElement) {
   static is = NAMESPACE;
 
   static styles = HelloWordStyle;
@@ -16,6 +18,10 @@ export default class HelloWord extends LitElement {
     this.description = '';
     this.listString = [];
   }
+
+  static scopedElements = {
+    'info-box-alternative': InfoBox,
+  };
 
   static properties = {
     translations: { type: Object, state: true },
@@ -57,18 +63,8 @@ export default class HelloWord extends LitElement {
     },
   ];
 
-  handleNormalClick() {
-    // eslint-disable-next-line no-console
-    console.log('Normal:', this);
-  }
-
-  handleArrowClick() {
-    // eslint-disable-next-line no-console
-    console.log('Arrow:', this);
-  }
-
   renderComponent() {
-    return html`<div>
+    return html`<div data-test="content">
       ${this.hasSymbol ? html`<span>👋</span>` : ''}
       <h1>${this.translations['title']}</h1>
       ${this.description ? html`<p class="description">${this.description}</p>` : ''}
@@ -77,7 +73,10 @@ export default class HelloWord extends LitElement {
             ${this.listString.map(item => html`<li>${item}</li>`)}
           </ul>`
         : ''}
-      <button @click="${this.continue}">${this.translations['button']}</button>
+      <info-box-alternative></info-box-alternative>
+      <button data-test="buttonClick" @click="${this.continue}">
+        ${this.translations['button']}
+      </button>
     </div>`;
   }
 

@@ -1,0 +1,224 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/06 - Lección/1- Lección" />
+
+# Insercion de componentes, test unitarios y arrow Funcions
+
+## Nuevas dependencias
+
+Antes de iniciar, deberás instalar las nuevas dependencias y devdependencias que se han añadido al proyecto.
+
+### Dependencies
+
+- **@open-wc/scoped-elements**: Permitirá la inserción de componentes dentro de otros componentes.,
+- **@webcomponents/scoped-custom-element-registry**: Permite el uso de scopedElements en navegadores que no lo soportan de forma nativa.
+
+### DevDependencies
+
+- **@open-wc/testing**: Proporciona utilidades para realizar pruebas unitarias en componentes web.
+- **@types/chai**: Proporciona definiciones de tipos para la biblioteca Chai.
+- **@types/mocha**: Proporciona definiciones de tipos para el framework de pruebas Mocha.
+- **@web/dev-server**: Servidor de desarrollo para aplicaciones web.
+- **@web/dev-server-esbuild**: Plugin para integrar esbuild con el servidor de desarrollo.
+- **@web/dev-server-import-maps**: Plugin para manejar import maps en el servidor de desarrollo.
+- **@web/mocks**: Proporciona utilidades para crear mocks en pruebas.
+- **@web/test-runner**: Herramienta para ejecutar pruebas en navegadores.
+- **@web/test-runner-commands**: Proporciona comandos adicionales para el test runner.
+- **@web/test-runner-junit-reporter**: Genera reportes de pruebas en formato JUnit.
+- **@web/test-runner-mocha**: Plugin para integrar Mocha con el test runner.
+- **@web/test-runner-playwright**: Plugin para ejecutar pruebas con Playwright.
+- **@web/test-runner-visual-regression**: Plugin para pruebas de regresión visual.
+- **npm-run-all**: Permite ejecutar múltiples scripts de npm en paralelo o secuencialmente.
+- **sinon**: Proporciona utilidades para crear mocks, stubs y spies en pruebas.
+
+```bash
+npm install
+```
+
+# Inserción de componentes
+
+Antes de configurar los componentes es necesario entender lo que vamos a hacer.
+Lo que haremos será incrustar **internamente** un componente dentro de otro.
+Cuando definimos `customElements.define(HelloWord.is, HelloWord);` lo estamos haciendo para el storybook, pero no para la aplicación, pues los archivos storybook, quedan fuera de la build. De manera que para poder usar un componente dentro de otro, necesitamos alguna manera de asociar un tag con un componente creado.
+Esto lo haremos con la propiedad `scopedElements`.
+
+Para poder insertar un componente dentro de otro, primero de todo importaremos el componente que queremos añadir al componente padre.
+
+```js
+import InfoBox from '../../info-box/src/InfoBox.js';
+```
+
+El componente padre tendrá que extender el mixin\* **`ScopedElementsMixin`** que nos proporciona la librería **`@open-wc/scoped-elements`**.
+
+> \*Los mixin los veremos en detalle en la siguiente unidad, pero de momento basta con ssaber que es una función que añade funcionalidades a una clase.
+
+```js
+import { ScopedElementsMixin } from '@open-wc/scoped-elements';
+```
+
+```js
+class HelloWorld extends ScopedElementsMixin(LitElement) {
+```
+
+Una vez que el componente padre extiende el mixin, ya podemos usar la propiedad **`scopedElements`** para definir los componentes hijos que vamos a usar dentro del componente padre.
+Si te fijas he cambiado el nombre del tag del componente hijo para mostrar que podemos usar cualquier nombre, no tiene por qué coincidir con el definido en el componente hijo.
+
+```js
+static scopedElements = {
+  'info-box-alternative': InfoBox,
+};
+```
+
+Finalmente, ya podemos usar el componente hijo dentro del template del componente padre.
+
+```js
+render() {
+  return html`
+    <h1>Hello, ${this.name}!</h1>
+    <info-box-alternative></info-box-alternative>
+  `;
+}
+```
+
+## Test unitarios
+
+### Para qué sirven los test unitarios
+
+Los test unitarios son una parte fundamental del desarrollo de software, ya que nos permiten verificar que cada unidad de código funciona correctamente de manera aislada.
+Para crear test unitarios en nuestro proyecto, utilizaremos la librería **`@open-wc/testing`** que nos proporciona utilidades específicas para probar componentes web.
+Para crear un test unitario, primero crearemos un archivo de test en la carpeta `test` del componente que queremos probar.
+El archivo de test tendrá el mismo nombre que el componente, pero con la extensión `.unit.test.js`.
+Esto lo hemos especificado en los scripts de package.json.
+
+### Estructura de un test unitario
+
+Si te fijas en el archivo de test del componente `HelloWord`, verás que empieza con la creacion de dos funciones `deepElementUpdate` y `createElement` que nos permitirán detectar los cambios en el DOM y crear instancias del componente que vamos a probar.
+
+No es necesario que entiendas el funcionamiento de estas funciones, pero si en que casos se usan. Más adelante, los exportaremos como utilidades para poder usarlas en cualquier test.
+
+### Empezamos los test
+
+Para empezar un test unitario, lo primero es usar la función `describe` para definir el bloque de test del componente.
+
+```js
+describe('HelloWord', () => {
+```
+
+Dentro de la function `describe`, indicamos un string que nos indique el nombre del componente que vamos a probar y una función que contendrá los test.
+
+Si tenemos mas de un test, y queremos que antes o despues de la ejecucion de los test se ejecute alguna función, podemos usar las funciones `before`, `beforeEach`, `after` y `afterEach`.
+Estas funciones podrán ser asincronas si es necesario.
+
+```js
+before(async () => {
+  // Se ejecuta una vez antes de todos los test
+});
+
+beforeEach(async () => {
+  // Se ejecuta antes de cada test
+});
+
+after(async () => {
+  // Se ejecuta una vez despues de todos los test
+});
+
+afterEach(async () => {
+  // Se ejecuta despues de cada test
+});
+```
+
+En nuestro caso de ejemplo, en el bloque `beforeEach` creamos el componente `HelloWord`mediante la función `createElement`. Una vez creado, dado que el componente tiene una parte asincrona (el connectedCallback), esperamos a que se actualice el componente con la función `waitUntil`
+
+```js
+element = await createElement(HelloWord, {
+  hasSymbol: true,
+  description: 'This is a description',
+  listString: ['Item 1', 'Item 2', 'Item 3'],
+});
+
+await waitUntil(() => element.shadowRoot.querySelector('[data-test="content"]'));
+```
+
+En el bloque `afterEach` destruimos el componente para que no interfiera en los siguientes test.
+
+```js
+fixtureCleanup();
+```
+
+Por cada test que quieras realizar, usaremos la función `it` que recibe un string con el nombre del test y una función que contiene el código del test.
+
+```js
+it('should have a default name "World"', async () => {
+  // Código del test
+});
+```
+
+Con el comando `npm run test:unit:watch` quedarás escuchando los cambios que produzcas en los archivos test. Pudiendo hacer focus en un unico archivo en concreto.
+Pero si dentro de este archivo hay 40 test unitarios, y fallan 10, ver el error puede ser tedioso o complicado.
+
+Para esto vamos a ver dos opciones muy comodas que te ayudarán en este proceso.
+
+Con la opcion `skip` harás que este test **NO** se ejecute en ningun momento.
+
+```js
+it.skip('should have a default name "World"', async () => {
+  // Código del test
+});
+```
+
+Con la opcion `only` harás que únicamente los test con `only` se ejecuten. De manera que si tienes 30 test, y dos tienen `only` solo se ejecutarán estos dos. Esto es muy cómodo para debueguear un error en un test concreto.
+
+```js
+it.only('should have a default name "World"', async () => {
+  // Código del test
+});
+```
+
+Dentro de la función del test, usaremos la función `expect` para verificar que el resultado es el esperado.
+
+```js
+expect('Word').to.equal('World');
+```
+
+En nuestros test podemos ver que comprovamos que el componente se ha creado correctamente, buscando un elemento con la propiedad `data-test="content"` que hemos añadido al template del componente.
+
+Este test nos aporta que el componente carga.
+
+Por otro lado, comprovamos que el componente en el momento de clickar en el boton, emite el evento `custom-event` con el detalle esperado.
+
+Para hacer esto usaremos `setTimeout` para esperar a que se emita el evento y oneEvent para escuchar el evento.
+
+Por último, ejecutaremos `expect` para verificar que el evento se ha emitido.
+
+```js
+setTimeout(() => element.shadowRoot.querySelector('button').click());
+const ev = await oneEvent(element, 'custom-event');
+expect(ev).to.exist;
+```
+
+> Para más informacion sobre todos los tipos diferentes de condicionales que podemos usar en los test, puedes consultar la documentación de Chai [aquí](https://www.chaijs.com/api/bdd/). Es **muy importante** que entiendas bien todas las posibilidades que tienes, pues los test son fundamentales en el desarrollo de software.
+
+### Ejecutar los test
+
+Para ejecutar los test, usaremos el script `test:unit` y `test:unit:watch` que hemos añadido en el package.json.
+
+```bash
+npm run test:unit
+npm run test:unit:watch
+```
+
+La diferencia entre ambos es que el primero ejecuta los test una sola vez y el segundo los ejecuta en modo watch, es decir, cada vez que guardes un cambio en el código, se volverán a ejecutar los test y podrás debueguearlos para encontrar posibles errores.
+
+Por otro lado, ambos ejecutarán el coverage de los test y generarán un archivo `coverage/lcov-report/index.html` que podrás abrir en el navegador para ver el resultado del coverage.
+
+Esto te indicará qué partes del código están cubiertas por los test y cuáles no, además de darte una puntuación global, que he especificado en el archivo `web-test-runner.config.msj` y que intentaremos mantener siempre por encima del 90%.
+
+## Arrow Functions
+
+Por último, vamos las arrow funcions.
+Para esto te he preparado un html que puedes visualizar [aquí](ArrowFunction.html).
+En este html tienes varios ejemplos de funciones normales y arrow functions.
+Pero lo que me interesa es que te fijes principalmente en la diferencia entre ambas en cuanto al contexto del `this`.
+Podrás verlo tanto en la consola del navegador como en la respuesta que se muestra en el html.
+
+Si tienes alguna duda, no dudes en preguntarme.

@@ -1,3 +1,4 @@
+import '../__polyfills/scoped-custom-element-registry.min.js';
 import { decorators } from './decorators.js';
 
 /** @type { import('@storybook/web-components-vite').Preview } */

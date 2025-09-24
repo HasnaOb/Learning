@@ -1,0 +1,137 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/Información útil" />
+
+# Información útil
+
+Aquí podrás encontrar algunos códigos útiles y su explicación. Sientete libre de añadir o modificar este archivo.
+
+## GIT
+
+```consola
+git clone ruta
+```
+
+En la ubicación donde se encuentre la consola, **clonará el repositorio**
+
+```consola
+git checkout feat/name
+```
+
+Te **cambias de la rama** en la que estás a una ya creada
+
+```consola
+git checkout -b feat/name
+```
+
+**Crea la rama** indicada y te mueves a ella
+
+```consola
+git branch
+git branch --list
+```
+
+**Muestra** las ramas existentes en tu local
+
+```consola
+git branch --list -r
+```
+
+**Muestra todas** las ramas existentes en local y servidor
+
+```consola
+git branch -d feat/name
+git branch -D feat/name
+```
+
+**Borra una rama.**
+En caso de que la rama no se llegase a subir al servidor, dará error. Para evitarlo usar -D
+
+```consola
+git add "file/name"
+git add .
+```
+
+**Añade al staged** un archivo en específico (modo ruta).
+Añade TODOS los archivos modificados (modo punto ".").
+
+```consola
+git commit -m "feat:name"
+```
+
+**Crea un commit** con lo que tengas en el staged
+
+```consola
+git commit --amend
+```
+
+Te permite **modificar por completo el commit** anterior, añadiendo archivos que tengas en staged y te permite modificar el texto del commit.
+
+```consola
+git commit --amend --no-edit
+```
+
+**Modifica el commit anterior** pero no te dejará modificar el texto, únicamente añadirá los archivos al commit anterior
+
+```consola
+git pull
+```
+
+**Descarga todos los commits** de la rama en la que estés
+
+```consola
+git pull --rebase origin main
+```
+
+**Añade los commits de la rama principal**, por debajo de tus commits.
+Para entender esto más facilmente, imagínate que A y B están trabajando en un mismo repo con sus propias ramas.
+A termina y mergea a main.
+B podría tener conflictos porque tiene su rama en una versión anterior al mergeo de A.
+Así que antes de mergear a master, ejecuta este comando y se trae los cambios de A, colocándolos antes de sus propios commits.
+Esto, obviamente, puede provocar conflictos, pero los puedes resolver en el local facilmente.
+
+```consola
+git fetch
+```
+
+**Actualiza el repositorio** y todas las ramas
+
+```consola
+git push
+```
+
+**Sube tus commits** y/o tu rama al repositorio git
+
+```consola
+git stash -u save "nombre personalizado"
+```
+
+**Guarda** todos los cambios realizados en la lista de stash bajo el nombre indicado.
+
+```consola
+git stash list
+```
+
+**Muestra la lista de stash** guardados
+
+```consola
+git stash apply
+git stash apply stash@{0}
+```
+
+**Recupera los archivos modificados** dentro de un stash.
+Si no se le especifica el orden `stash@{0}` se recupera el último guardado
+
+```consola
+git reset --soft head^1
+```
+
+Te **posicionas en el commit anterior** (como si aún no lo hubieras realizado) recuperando los archivos modificados
+
+```consola
+git reset -hard head^1
+```
+
+Te **posiciona en el commit anterior** (como si aun no lo hubieras realizado) perdiendo todos los cambios.
+**_CUIDADO:_** Si no los tenias almacenados en el servidor, se pierden y no se pueden
+recuperar.

@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   extends: ['eslint:recommended'],
   languageOptions: {
     globals: {
@@ -25,4 +25,15 @@ module.exports = {
     'prefer-const': 'error',
     'no-console': 'error',
   },
+  overrides: [
+    {
+      files: ['**/*.unit.test.js'],
+      globals: { Pact: true },
+      rules: {
+        'no-undef': 'off',
+        'no-unused-expressions': 'off',
+        'import/no-extraneous-dependencies': 'off',
+      },
+    },
+  ],
 };

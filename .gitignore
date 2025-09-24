@@ -9,3 +9,6 @@ storybook-static/
 
 # build de Vite 
 dist/
+
+#coverage de tests
+coverage/

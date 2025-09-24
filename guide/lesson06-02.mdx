@@ -1,0 +1,34 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/06 - Lección/2- Deberes" />
+
+# Deberes
+
+Teniendo en chuenta lo explicado en la lección, creo que es obvio lo que te voy a pedir.
+Quiero que crees los test unitarios de todos los componentes finalizados que tengas en el repositorio actualmente.
+
+Si alguno se te complica, avísame y lo miramos.
+
+Por otro lado, con la explicacion de `scopedElements` deberias poder preparar el siguiente componente.
+
+Crea el componente `calculator-view`, que incluirá los dos componentes anteriores `info-box` y `button-symbol`.
+Organízalos de la siguiente manera (puedes usar el CSS o HTML que consideres adecuado):
+
+Título de la página: Calculadora personalizada
+
+| Diseño              | de                  | la                  | calculadora          |
+| ------------------- | ------------------- | ------------------- | -------------------- |
+| `info-box`          |
+| `button-symbol` (7) | `button-symbol` (8) | `button-symbol` (9) | `button-symbol` (+)  |
+| `button-symbol` (4) | `button-symbol` (5) | `button-symbol` (6) | `button-symbol` (-)  |
+| `button-symbol` (1) | `button-symbol` (2) | `button-symbol` (3) | `button-symbol` (\*) |
+| `button-symbol` (0) | `button-symbol` (.) | `button-symbol` (=) | `button-symbol` (/)  |
+
+Como podrás imaginar, lo que vamos a hacer es una calculadora.
+Cuando hagas clic en un `button-symbol`, este enviará el evento correspondiente, que modificará el texto del `info-box` y mostrará la operación.
+Te recomiendo ir añadiendo cada carácter a un array y gestionarlo desde allí.
+
+Por ahora, el único objetivo es escribir la operación.
+La parte de realizar los cálculos o borrar contenido la dejaremos para una segunda parte, a no ser que te resulte muy sencillo implementarla.
+
+> No olvides que por cada componente creado tiene que tener siempre, su readme, su story y sus test unitarios.

@@ -1,0 +1,164 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/03 - Lección/1- Lección" />
+
+# Explicacion componentes LitElement
+
+## Nuevas configuraciones
+
+Extensiones nuevas:
+
+- **`Error Lens`:** Te muestra los errores de linting.
+- **`MDX`:**: Te ayudará a visualizar estos archivos.
+
+Por último, he añadido nuevos paquetes y configuración, por lo que debes ejecutar `npm i`.
+
+## Dinámica de trabajo
+
+Quiero comentarte que a partir de este momento tendrás que cumplir ciertas obligaciones a la hora de escribir código. Si has añadido las extensiones e instalado las nuevas dependencias, las irás viendo.
+Entenderás que, aunque en muchas ocasiones esto es un fastidio, ayudará a dejar el código más limpio.
+
+Estas normas las tendrás que acatar sí o sí, ya que, si no lo haces, no podrás completar el commit y te dará un error.
+
+## Explicación de un componente LitElement
+
+Ahora vamos a explicar algunas cosas importantes de los componentes.
+Te recomiendo que tengas el componente "HelloWorld" al lado, porque voy a explicarlo paso a paso:
+
+```js
+import { LitElement, html } from 'lit';
+import { HelloWordStyle } from './HelloWord.style';
+import es from '../assets/translations/es-ES.js';
+```
+
+Lo primero que veremos son los **imports**, que son los elementos que necesitamos cargar **ANTES** de crear el componente.
+En nuestro ejemplo tenemos 4 de 3 fuentes diferentes. Si te fijas, podemos obtenerlos con y sin llaves. _¿De qué depende esto?_
+Sencillo: cuando quieres recuperar el componente/método/función/objeto por defecto que un archivo exporta (que no tiene por qué tener solo uno), le asignas un nombre y se guardará en él. Si te fijas, dentro del archivo de idiomas, se crea un objeto, pero no se le asigna un nombre; directamente se exporta.
+
+Por otro lado, en Lit, recuperamos dos cosas dentro de llaves. Concretamente, lo que estamos haciendo aquí es una desestructuración. Cuando importas algo, ese algo siempre será un objeto, con los elementos que ese archivo ha exportado. Si el archivo tiene (por ejemplo) 20 exportaciones, pero tú solo quieres 2, solo especificamos esas dos que queramos.
+
+Esto aliviará la carga a la hora de crear el componente (generar el build).
+
+```js
+const NAMESPACE = 'hello-word';
+```
+
+En esta línea creamos una constante que se utilizará en diferentes partes del componente.
+
+```js
+export default class HelloWord extends LitElement {
+```
+
+En este punto estamos haciendo varias cosas.
+En orden, serían:
+
+- Estamos indicando que exportaremos el componente que estamos a punto de crear.
+- Indicamos que este componente será por defecto de este archivo (en un archivo solo puede haber un único default).
+- Indicamos que será una clase de JavaScript.
+- Indicamos que el nombre de la clase será "HelloWorld".
+- Indicamos que esta clase extenderá de uno o más componentes\*.
+- Indicamos qué componentes se usarán de base para extender.
+  > \*¿Qué significa que un componente extiende? Que heredará todo lo que tenga el padre. En el ejemplo típico de las clases, hablamos de hacer grupos, por ejemplo:
+  > Ser vivo > Vertebrados > Mamíferos > Ser humano > Hombre > Óscar
+  > Si indicamos que todos los vertebrados tienen que tener vértebras, podríamos añadir a "Vertebrados" esa propiedad, y todos los hijos que extiendan de "Vertebrados" lo heredarán.
+  > Si no te queda claro, avísame.
+
+Con esto, añadimos algunas funcionalidades de LitElement a nuestro componente.
+
+```js
+static is = NAMESPACE;
+```
+
+Cuando indicamos static, estamos asignando un valor fijo a este componente. En este caso, le asignamos "is" puramente para que sea cómodo. Podríamos haber puesto "pepita" y habría funcionado perfectamente, pero así nos es más fácil diferenciarlo en el futuro.
+
+```js
+static styles = HelloWordStyle;
+```
+
+Indicamos qué estilos de CSS vamos a usar. Heredado de Lit.
+
+```js
+constructor() {
+  super();
+  this.translations = null;
+}
+```
+
+Constructor e inicializador de propiedades. Algo importante a entender es que estamos creando un objeto. Este objeto es muy similar a un objeto JSON, el cual tiene propiedades/keys dentro. En este caso, en el constructor creamos la propiedad "translations" con el fin de inicializarla. También añadimos **`super();`** debido a que, como extendemos de otro objeto, tenemos que ejecutar primero el constructor heredado antes que el nuestro.
+Es importante entender la diferencia entre propiedades internas y properties externas o reactivas. Ahora las comentamos.
+
+```js
+static properties = {
+  translations: { type: Object },
+};
+```
+
+En LitElements, las propiedades internas se pueden convertir en properties externas. En el momento en que se añaden a esta lista, serán "escuchadas".
+¿Qué quiere decir esto? Que en el momento en que se actualicen/cambien, se volverá a realizar un render del componente para actualizarse a los nuevos valores.
+
+Algo importante de las properties es que pueden escuchar fuera del componente, y es la vía principal de obtención de datos. Esto lo veremos en la próxima lección.
+
+Para diferenciarlas más fácilmente entre propiedades internas o properties externas, prefiero nombrarlas "**propiedades**" y "**properties**".
+
+```js
+async connectedCallback() {
+  super.connectedCallback();
+  await this.loadTranslations();
+}
+```
+
+Primero de todo, tienes que entender que las funciones dentro de una clase se denominan métodos.
+Y estos métodos pueden ser síncronos (lineales) o asíncronos (con llamadas internas).
+Para diferenciarlos, se usa la nomenclatura `async` antes del método para poder decirle al componente cómo se tiene que comportar.
+
+Por otro lado, si te fijas, parece que he creado un método con el nombre `connectedCallback`, pero nunca se ejecuta... ¿Entonces cómo puede ser que sí se ejecute?
+La respuesta está en los ciclos de vida de Lit. Lit tiene una serie de métodos que ejecuta en un orden establecido y, tras ciertas circunstancias concretas, los puede volver a ejecutar. En concreto, el "connectedCallback" es un método que se ejecuta, antes de la ejecución del render, una sola vez y es donde se recomienda añadir las llamadas necesarias para la ejecución correcta del componente.
+Puedes consultar los ciclos de vida de Lit [aquí](https://lit.dev/docs/components/lifecycle/).
+
+```js
+async loadTranslations(locale = navigator.language) {
+  try {
+    const translateFunction = HelloWord.localizeNamespaces.find(elem =>
+    Object.keys(elem).some(key => key === HelloWord.is),
+  )[HelloWord.is];
+    this.translations = await translateFunction(locale);
+    console.log(this.translations);
+  } catch (error) {}
+}
+```
+
+Este método me lo tuve que sacar un poco de la manga, pues en el futuro será un mixin y será invisible para ti.
+Lo que hace es cargar las traducciones correctas de este componente.
+
+```js
+static localizeNamespaces = [
+  {
+    [NAMESPACE]: locale => {
+      const namespaces = {
+        'es-ES': () => Promise.resolve(es),
+        'en-GB': () => import('../assets/translations/en-GB.js'),
+      };
+      return namespaces[locale]();
+    },
+  },
+];
+```
+
+Para especificar las traducciones de nuestro componente usaremos esta nomenclatura.
+Como puedes ver, no es nada del otro mundo. Si tienes dudas con lo que hace, avísame.
+
+```js
+render() {
+  return this.translations ? html`<h1>${this.translations['title']}</h1>` : html``;
+}
+```
+
+Y ya, por último, el render, que es la función que da visibilidad al componente y que hará que veas algo.
+Se ejecutará cuando el ciclo de vida de Lit lo indique y, en este ejemplo, se ejecuta dos veces:
+
+1. Al arrancar, después de haber ejecutado el connectedCallback.
+2. Dado que el método connectedCallback es asíncrono, cuando la función interna finaliza y la property "translations" se actualiza, se vuelve a renderizar.
+
+Internamente tenemos un ternario para que, en caso de no tener las traducciones, no intente acceder a ellas.
+
+Con esto queda explicado un componente Lit básico.

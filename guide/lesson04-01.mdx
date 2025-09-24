@@ -1,0 +1,30 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/04 - Lección/1- Lección" />
+
+# Documentando componentes
+
+## Introducción
+
+Aunque no nos guste, la documentación es muy importante. Y no me refiero únicamente a los comentarios o a la nomenclatura clara de las variables. En esta guía aprenderás a añadir un nuevo archivo que te servirá para explicar un componente a los desarrolladores que vengan detrás de ti.
+
+## Creando el README
+
+Si te fijas, he añadido el archivo README.mdx al directorio del componente "HelloWorld". Vamos a explicarlo poco a poco.
+Para que sea más sencillo de ver, te recomiendo añadir la extensión **`MDX`** a tu Visual Studio Code.
+
+Al añadir la etiqueta `<Meta of`, lo que estamos haciendo es asociar el archivo **README** al story del componente, de manera que en el storybook se mostrarán juntos.
+Si la borras y guardas, podrás ver que sin esta etiqueta en el storybook, se muestran separados.
+Esto se hace para que sea visualmente más cómodo.
+
+Para diferenciar entre los h1, h2 y h3, se usan los #.
+A más #, más pequeño será el texto y se mostrará diferente en el storybook.
+
+Las tablas son muy útiles, y crearlas es muy sencillo.
+Solo cópiala, pégala, modifica los valores y, al guardar, se ajustarán los bordes de forma automática gracias a **Prettier**.
+
+Puedes añadir HTML con la etiqueta html al archivo, con la intención de que se muestre a los futuros desarrolladores cómo se debe escribir.
+
+Por último, puedes mostrar una demostración de cómo se visualiza tu componente en el **README**.
+Para eso, basta con usar la etiqueta `<Story`, indicando qué versión del story quieres usar.
+Dado que nosotros únicamente exportamos main, solo ponemos esa demostración, pero podríamos poner más si quisiéramos.
