@@ -1,0 +1,138 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Guide/08 - Lección/1- Mocks" />
+
+# Mocks
+
+## Introducción
+
+En esta lección vamos a ver el concepto de mocks.
+Los mocks son objetos o funciones que simulan el comportamiento de componentes o servicios reales.
+Nos permiten probar componentes de manera aislada, sin depender de servicios externos o datos reales.
+Esto es especialmente útil cuando queremos probar componentes que dependen de providers, como el que vimos en la lección anterior.
+
+## Mocks
+
+Para entender mejor el concepto de mocks, vamos a ver cómo podemos crear un mock para el provider `ApiUser` que vimos en la lección anterior.
+Supongamos que queremos probar nuestro componente `hello-word`, pero no queremos hacer llamadas reales a la API para obtener los datos del usuario.
+Para ello, podemos crear un mock del provider `ApiUser` que devuelva datos simulados en lugar de hacer una llamada real a la API.
+
+Pero para esto tenemos que tener ciertas dependencias instaladas en nuestro proyecto.
+
+```bash
+    "msw": "^2.12.6",
+    "msw-storybook-addon": "^2.0.6",
+```
+
+Y configurar el workerDirectory a `public`.
+
+```bash
+ "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+```
+
+Esto ya lo hice yo asi que tu solo tendrás que hacer un `npm install` o `yarn install` para tener estas dependencias en tu proyecto.
+
+Una vez que tenemos las dependencias instaladas, podemos crear un mock para el provider `ApiUser`.
+
+Para ello, podemos añadir todas las posibles llamadas de nuestra API en el archivo `.storybook/preview.js` añadiendolos al array de handlers, pero nosotros vamos a indicar en nuestros storybooks, los mocks que queremos usar.
+
+Para esto primero tenemos que crear el mock y su scenario. El mock son los datos que el cliente va a recibir y el scenario es la llamada que vamos a interceptar.
+
+Esto lo podrás encontrar en el archivo `__mocks__/api-user/mock/dataUserMock.js`.
+
+```javascript
+export const dataUserMock = {
+  id: '12345',
+  name: 'HASNA',
+  email: 'asd@asd.com',
+  typeUser: typeUsers.VIEWER,
+};
+```
+
+Y el scenario en el archivo `__mocks__/api-user/scenario/apiUserScenario.js`.
+
+```javascript
+const NORMAL_CLIENT = baseHttpGet({ url, response: responseDataUser });
+
+export const apiUserScenario = { NORMAL_CLIENT };
+```
+
+Es importante profundizar en el archivo `basesHttp.js` donde se encuentra la función `baseHttpGet` que es la que se encarga de interceptar las llamadas HTTP y devolver los datos simulados.
+
+Sin esta automatizacion quedaría algo así:
+
+```javascript
+const NORMAL_CLIENT = http.get(url, HttpResponse.json(response, { status: 200 }));
+
+export const apiUserScenario = { NORMAL_CLIENT };
+```
+
+Me interesa explicarlo.
+Usando `http.get`, interceptamos las llamadas GET a la URL especificada.
+Luego, usamos `HttpResponse.json` para crear una respuesta JSON con los datos simulados.
+Indicamos el estado de la respuesta como 200 (OK), pues podemos modificar el estado para posibles escenarios de error.
+Finalmente, exportamos el escenario `NORMAL_CLIENT` para que pueda ser utilizado en nuestros storybooks.
+
+Una vez que tenemos el mock y el scenario creados, podemos usarlos en nuestro storybook.
+
+```javascript
+main.parameters = {
+  msw: {
+    handlers: [apiUserScenario.NORMAL_CLIENT],
+  },
+  controls: { expanded: true },
+  docs: { source: { type: 'code' } },
+};
+```
+
+Simplemente importamos el scenario y lo añadimos al array de handlers en los parámetros del storybook.
+De esta manera, cuando ejecutemos nuestro storybook, las llamadas al provider `ApiUser` serán interceptadas por el mock y devolverán los datos simulados en lugar de hacer llamadas reales a la API.
+
+Con esto ya tenemos nuestro mock funcionando y podemos probar nuestro componente `hello-word` sin depender de llamadas reales a la API.
+
+## Mocks en test unitarios
+
+Los mocks no solo son útiles en storybook, sino que también podemos usarlos en nuestros test unitarios.
+Recordemos que como tanto el modelo `UserModel` como el provider `ApiUser` contienen logica, por lo que es necesario testearlos y en algunos casos esos test necesitarán estar mockeados.
+
+(Obviamente, los componentes que necesiten de providers también necesitarán estar mockeados).
+
+Para usar mocks en nuestros test unitarios, podemos usar varias opciones, nosotros veremos la opcion mas compleja, y esta será mockear con `sinon` todas las llamadas fetch que se hagan en el provider `ApiUser` para devolver los datos simulados.
+
+```javascript
+import { stub, restore } from 'sinon';
+
+it('should fetch user data and return a UserModel instance', async () => {
+  const fetchStub = stub(window, 'fetch').resolves(
+    new Response(JSON.stringify(responseDataUser), {
+      ...RESPONSE_STATUS.OK,
+      headers: { 'Content-type': 'application/json' },
+    }),
+  );
+  const userModel = await provider.getDataUser('1');
+
+  expect(fetchStub.calledOnce).to.be.true;
+});
+```
+
+En este ejemplo, usamos `sinon` para crear un stub de la función `fetch` del objeto `window`.
+El stub intercepta las llamadas a `fetch` y devuelve una respuesta simulada con los datos del usuario.
+Es muy importante que primero debemos preparar el mock antes de llamar al método que queremos testear pues si no se realiza de esta manera, el método `getDataUser` hará una llamada real a la API induciendo un fallo en el test.
+Luego, llamamos al método `getDataUser` del provider `ApiUser`, que internamente hará una llamada a `fetch`.
+
+Finalmente, verificamos que el stub de `fetch` fue llamado una vez durante la ejecución del método.
+Después de cada test, es importante restaurar la función original de `fetch` para evitar interferencias con otros tests.
+
+```javascript
+afterEach(() => {
+  restore();
+});
+```
+
+De esta manera, podemos usar mocks en nuestros test unitarios para probar componentes y providers de manera aislada, sin depender de servicios externos o datos reales.
+
+Pero como he comentado inicialmente, esta no es la unica forma de mockear en test unitarios, existen librerias como `msw` que nos permiten hacer mocks de una manera mas sencilla y automatizada, similar a como lo hacemos en storybook.

@@ -3,6 +3,7 @@ import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 import { HelloWordStyle } from './HelloWord.style';
 import es from '../assets/translations/es-ES.js';
 import InfoBox from '../../info-box/src/InfoBox.js';
+import { ApiUser } from '../../../core/providers/ApiUser.js';
 
 const NAMESPACE = 'hello-word';
 export default class HelloWord extends ScopedElementsMixin(LitElement) {
@@ -13,10 +14,16 @@ export default class HelloWord extends ScopedElementsMixin(LitElement) {
   constructor() {
     super();
 
+    this.providerApiUser = new ApiUser();
+
     this.translations = null;
     this.hasSymbol = false;
     this.description = '';
     this.listString = [];
+    /**
+     * @type {import('../../../core/.types-def/types.js').DataUser|null}
+     */
+    this.userData = null;
   }
 
   static scopedElements = {
@@ -24,6 +31,7 @@ export default class HelloWord extends ScopedElementsMixin(LitElement) {
   };
 
   static properties = {
+    userData: { type: Object, state: true },
     translations: { type: Object, state: true },
     hasSymbol: { type: Boolean, attribute: 'has-symbol' },
     description: { type: String, attribute: 'description', reflect: true },
@@ -38,6 +46,16 @@ export default class HelloWord extends ScopedElementsMixin(LitElement) {
     super.connectedCallback();
 
     await this.loadTranslations();
+
+    await this.getData();
+  }
+
+  async getData() {
+    try {
+      this.userData = await this.providerApiUser.getDataUser('12345');
+    } catch (error) {
+      throw new Error('Error fetching user data:', error);
+    }
   }
 
   async loadTranslations(locale = navigator.language) {
@@ -66,8 +84,11 @@ export default class HelloWord extends ScopedElementsMixin(LitElement) {
   renderComponent() {
     return html`<div data-test="content">
       ${this.hasSymbol ? html`<span>👋</span>` : ''}
-      <h1>${this.translations['title']}</h1>
+      <h1>${this.translations['title']} ${this.userData?.name || '...'}</h1>
       ${this.description ? html`<p class="description">${this.description}</p>` : ''}
+      ${this.userData?.typeUser
+        ? html`<p class="type-user">Tipo de usuario: <strong>${this.userData.typeUser}</strong></p>`
+        : ''}
       ${this.listString?.length
         ? html`<ul>
             ${this.listString.map(item => html`<li>${item}</li>`)}

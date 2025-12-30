@@ -1,9 +1,14 @@
 import '../__polyfills/scoped-custom-element-registry.min.js';
 import { decorators } from './decorators.js';
+import { initialize, mswLoader } from 'msw-storybook-addon';
+import { http, HttpResponse } from 'msw';
+
+initialize();
 
 /** @type { import('@storybook/web-components-vite').Preview } */
 const preview = {
   parameters: {
+    msw: { handlers: [] },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -18,6 +23,7 @@ const preview = {
       test: 'todo',
     },
   },
+  loaders: [mswLoader],
   decorators: [...decorators],
 };
 

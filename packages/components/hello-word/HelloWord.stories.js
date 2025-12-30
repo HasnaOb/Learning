@@ -1,5 +1,6 @@
 import { html } from 'lit';
 import HelloWord from './src/HelloWord.js';
+import { apiUserScenario } from '../../../__mocks__/api-user/scenario/apiUserScenario.js';
 
 if (!customElements.get(HelloWord.is)) {
   customElements.define(HelloWord.is, HelloWord);
@@ -54,6 +55,9 @@ export const main = ({ hasSymbol, description, listString }) =>
 main.argTypes = argTypes;
 main.args = defaultArgs;
 main.parameters = {
+  msw: {
+    handlers: [apiUserScenario.NORMAL_CLIENT],
+  },
   controls: { expanded: true },
   docs: { source: { type: 'code' } },
 };

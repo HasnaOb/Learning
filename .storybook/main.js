@@ -24,9 +24,11 @@ const config = {
     '@storybook/addon-vitest',
     '@storybook/addon-links',
     '@storybook/addon-themes',
+    'msw-storybook-addon',
   ],
+  staticDirs: [],
   framework: {
-    name: '@web/storybook-framework-web-components',
+    name: '@storybook/web-components-vite',
     options: {},
   },
   docs: { autodocs: false },
