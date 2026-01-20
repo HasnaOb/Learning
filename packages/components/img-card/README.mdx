@@ -1,0 +1,36 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+
+import ImgCard from './src/ImgCard.js';
+import * as Stories from './ImgCard.stories.js';
+
+<Meta of={Stories} />
+
+# ImgCard component
+
+This component renders a card that displays an image along with a title and subtitle.
+
+By default, the component shows a predefined image, title and subtitle.
+These values can be overridden by passing properties.
+
+## Properties
+
+The component can be configured via the following properties:
+
+| Name       | Type   | Description                             | Default                                                | Private |
+| ---------- | ------ | --------------------------------------- | ------------------------------------------------------ | ------- |
+| `img`      | String | The source URL of the image to display  | https://i.blogs.es/13421e/horizon0/1366_2000.jpg       | false   |
+| `title`    | String | The title text displayed on the card    | Horizon Zero Dawn                                      | false   |
+| `subtitle` | String | The subtitle text displayed on the card | An action RPG game developed by Guerrilla Games.       | false   |
+
+## Events
+
+This component does not emit any custom events.
+
+## Usage
+
+```html
+<img-card
+  img="https://example.com/image.jpg"
+  title="Card Title"
+  subtitle="Card Subtitle">
+</img-card>
